@@ -35,17 +35,17 @@ jobs:
       - name: Process
         working-directory: bot
         env:
-          TG_SESSION_TOKEN: ${{ secrets.TG_SESSION_TOKEN }}
-          TG_API_ID: ${{ secrets.TG_API_ID }}
-          TG_API_HASH: ${{ secrets.TG_API_HASH }}
-          CHANNEL_USERNAME: ${{ secrets.CHANNEL_USERNAME }}
+          CFG_A1: ${{ secrets.CFG_A1 }}
+          CFG_A2: ${{ secrets.CFG_A2 }}
+          CFG_A3: ${{ secrets.CFG_A3 }}
+          CFG_A4: ${{ secrets.CFG_A4 }}
           INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
           TUFAAX_BASE_URL: ${{ secrets.TUFAAX_BASE_URL }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
-          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
+          CFG_B1: ${{ secrets.CFG_B1 }}
+          CFG_B2: ${{ secrets.CFG_B2 }}
+          CFG_B3: ${{ secrets.CFG_B3 }}
+          CFG_B4: ${{ secrets.CFG_B4 }}
+          CFG_B5: ${{ secrets.CFG_B5 }}
           MOVIE_ID: ${{ github.event.client_payload.movie_id }}
           TG_MESSAGE_ID: ${{ github.event.client_payload.tg_message_id }}
           TMDB_ID: ${{ github.event.client_payload.tmdb_id }}
