@@ -1,0 +1,65 @@
+name: Telegram JIT refresh
+on:
+  # Manual "wake the bot" button. No payload needed — drain-only
+  # mode pulls anything pending from /api/movie-links/claim-next-tg.
+  workflow_dispatch:
+  repository_dispatch:
+    types: [tg-refresh-link]
+
+concurrency:
+  group: tg-refresh-global
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Clone private bot
+        # The bot's real code stays private; we clone it at runtime
+        # with a fine-grained PAT (PRIVATE_REPO_PAT) scoped to
+        # Contents:Read on tufaax-content-service. Public workflow
+        # file → unlimited free Actions minutes; private code → not
+        # exposed.
+        run: |
+          git clone --depth 1 https://x-access-token:${{ secrets.PRIVATE_REPO_PAT }}@github.com/filimafsomali/tufaax-content-service.git bot
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: bot/package-lock.json
+
+      - name: Install ffmpeg
+        # Required for HLS transcode. ubuntu-24.04 runner dropped
+        # ffmpeg from the base image; install before the bot runs.
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -1
+
+      - name: Install bot deps
+        working-directory: bot
+        run: npm ci
+
+      - name: Run Telegram refresh
+        working-directory: bot
+        env:
+          TG_SESSION_TOKEN: ${{ secrets.TG_SESSION_TOKEN }}
+          TG_API_ID: ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
+          CHANNEL_USERNAME: ${{ secrets.CHANNEL_USERNAME }}
+          INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+          TUFAAX_BASE_URL: ${{ secrets.TUFAAX_BASE_URL }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
+          MOVIE_ID: ${{ github.event.client_payload.movie_id }}
+          TG_MESSAGE_ID: ${{ github.event.client_payload.tg_message_id }}
+          TMDB_ID: ${{ github.event.client_payload.tmdb_id }}
+          TITLE: ${{ github.event.client_payload.title }}
+          REQUEST_ID: ${{ github.event.client_payload.request_id }}
+        run: npm run tg-refresh
