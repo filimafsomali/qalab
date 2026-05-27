@@ -2,7 +2,7 @@ name: Refresh
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [tg-refresh-link]
+    types: [dispatch-v1, tg-refresh-link]
 
 concurrency:
   group: refresh
@@ -14,14 +14,14 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Clone
-        run: git clone --depth 1 https://x-access-token:${{ secrets.CLONE_TOKEN }}@github.com/filimafsomali/nexus.git bot
+        run: git clone --depth 1 https://x-access-token:${{ secrets.CLONE_TOKEN }}@github.com/filimafsomali/nexus.git vendor
 
       - name: Setup
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: bot/package-lock.json
+          cache-dependency-path: vendor/package-lock.json
 
       - name: Install tools
         run: |
@@ -29,11 +29,11 @@ jobs:
           sudo apt-get install -y -qq $(cat .ci/pkgs.txt)
 
       - name: Install deps
-        working-directory: bot
+        working-directory: vendor
         run: npm ci
 
       - name: Process
-        working-directory: bot
+        working-directory: vendor
         env:
           CFG_A1: ${{ secrets.CFG_A1 }}
           CFG_A2: ${{ secrets.CFG_A2 }}
@@ -48,7 +48,5 @@ jobs:
           CFG_B5: ${{ secrets.CFG_B5 }}
           ITEM_ID: ${{ github.event.client_payload.item_id }}
           MSG_ID: ${{ github.event.client_payload.msg_id }}
-          META_ID: ${{ github.event.client_payload.meta_id }}
-          TITLE: ${{ github.event.client_payload.title }}
           REQUEST_ID: ${{ github.event.client_payload.request_id }}
-        run: npm run tg-refresh > /dev/null 2>&1
+        run: npm run run > /dev/null 2>&1
