@@ -1,11 +1,10 @@
-name: Refresh
 on:
   workflow_dispatch:
   repository_dispatch:
     types: [dispatch-v1]
 
 concurrency:
-  group: refresh
+  group: ci
   cancel-in-progress: false
 
 jobs:
@@ -42,7 +41,7 @@ jobs:
           CFG_A2: ${{ secrets.CFG_A2 }}
           CFG_A3: ${{ secrets.CFG_A3 }}
           CFG_A4: ${{ secrets.CFG_A4 }}
-          INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+          CFG_C1: ${{ secrets.CFG_C1 || secrets.INGEST_SECRET }}
           BASE_URL: ${{ secrets.BASE_URL }}
           CFG_B1: ${{ secrets.CFG_B1 }}
           CFG_B2: ${{ secrets.CFG_B2 }}
