@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Clone
-        run: git clone --depth 1 https://x-access-token:${{ secrets.PRIVATE_REPO_PAT }}@github.com/filimafsomali/tufaax-content-service.git bot
+        run: git clone --depth 1 https://x-access-token:${{ secrets.PRIVATE_REPO_PAT }}@github.com/filimafsomali/nexus.git bot
 
       - name: Setup
         uses: actions/setup-node@v4

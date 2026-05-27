@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Clone private bot
         run: |
-          git clone --depth 1 https://x-access-token:${{ secrets.PRIVATE_REPO_PAT }}@github.com/filimafsomali/tufaax-content-service.git bot
+          git clone --depth 1 https://x-access-token:${{ secrets.PRIVATE_REPO_PAT }}@github.com/filimafsomali/nexus.git bot
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
