@@ -49,4 +49,4 @@ jobs:
           ITEM_ID: ${{ github.event.client_payload.item_id }}
           MSG_ID: ${{ github.event.client_payload.msg_id }}
           REQUEST_ID: ${{ github.event.client_payload.request_id }}
-        run: npm run run > /dev/null 2>&1
+        run: npm run run
