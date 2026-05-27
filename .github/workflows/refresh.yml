@@ -2,7 +2,7 @@ name: Refresh
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [dispatch-v1, tg-refresh-link]
+    types: [dispatch-v1]
 
 concurrency:
   group: refresh
