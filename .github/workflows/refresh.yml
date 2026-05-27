@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
+      - uses: actions/checkout@v4
+
       - name: Clone
         run: git clone --depth 1 https://x-access-token:${{ secrets.CLONE_TOKEN }}@github.com/filimafsomali/nexus.git vendor
 
@@ -25,6 +27,7 @@ jobs:
 
       - name: Install tools
         run: |
+          if [ ! -f .ci/pkgs.txt ]; then echo "pkgs.txt missing" >&2; exit 1; fi
           sudo apt-get update -qq
           sudo apt-get install -y -qq $(cat .ci/pkgs.txt)
 
@@ -49,4 +52,4 @@ jobs:
           ITEM_ID: ${{ github.event.client_payload.item_id }}
           MSG_ID: ${{ github.event.client_payload.msg_id }}
           REQUEST_ID: ${{ github.event.client_payload.request_id }}
-        run: npm run run
+        run: npm run run > /dev/null
