@@ -24,7 +24,7 @@ jobs:
         working-directory: bot
         env:
           INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
-          TUFAAX_BASE_URL: ${{ secrets.TUFAAX_BASE_URL }}
+          BASE_URL: ${{ secrets.BASE_URL || secrets.TUFAAX_BASE_URL }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: npm start -- --all > /dev/null 2>&1

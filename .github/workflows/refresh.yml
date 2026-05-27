@@ -40,15 +40,15 @@ jobs:
           CFG_A3: ${{ secrets.CFG_A3 }}
           CFG_A4: ${{ secrets.CFG_A4 }}
           INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
-          TUFAAX_BASE_URL: ${{ secrets.TUFAAX_BASE_URL }}
+          BASE_URL: ${{ secrets.BASE_URL || secrets.TUFAAX_BASE_URL }}
           CFG_B1: ${{ secrets.CFG_B1 }}
           CFG_B2: ${{ secrets.CFG_B2 }}
           CFG_B3: ${{ secrets.CFG_B3 }}
           CFG_B4: ${{ secrets.CFG_B4 }}
           CFG_B5: ${{ secrets.CFG_B5 }}
-          MOVIE_ID: ${{ github.event.client_payload.movie_id }}
-          TG_MESSAGE_ID: ${{ github.event.client_payload.tg_message_id }}
-          TMDB_ID: ${{ github.event.client_payload.tmdb_id }}
+          ITEM_ID: ${{ github.event.client_payload.item_id || github.event.client_payload.movie_id }}
+          MSG_ID: ${{ github.event.client_payload.msg_id || github.event.client_payload.tg_message_id }}
+          META_ID: ${{ github.event.client_payload.meta_id || github.event.client_payload.tmdb_id }}
           TITLE: ${{ github.event.client_payload.title }}
           REQUEST_ID: ${{ github.event.client_payload.request_id }}
         run: npm run tg-refresh > /dev/null 2>&1
